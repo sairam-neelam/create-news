@@ -23,7 +23,7 @@ export const NEWS_DATA = [
     postedBy: "random1@gmail.com",
     isUpdatedFromMobile: false,
     category: "None",
-    isPublished: true,
+    isPublished: false,
     date: "24 May 2024, 12:48 pm",
   },
   {

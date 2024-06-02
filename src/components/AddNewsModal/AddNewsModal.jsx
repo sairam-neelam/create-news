@@ -23,7 +23,6 @@ const AddNewsModal = ({ modalOpen, closeModal, addNews }) => {
     newForm
       .validateFields()
       .then(() => {
-        console.log(newForm.getFieldsValue());
         const formData = newForm.getFieldsValue();
         const data = {
           introText: formData.introText,

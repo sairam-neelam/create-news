@@ -152,7 +152,11 @@ const NewsList = () => {
       title: "Published",
       dataIndex: "isPublished",
       key: "isPublished",
-      render: (text) => <span>{text ? "Published" : "Unpublished"}</span>,
+      render: (text) => (
+        <span className={`chip ${text ? "green-chip" : "red-chip"}`}>
+          {text ? "Published" : "Unpublished"}
+        </span>
+      ),
       align: "center",
     },
     {
