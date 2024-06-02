@@ -5,8 +5,8 @@ export const NEWS_DATA = [
     postedBy: "test1@gmail.com",
     isUpdatedFromMobile: true,
     category: "Art",
-    categoryId: 1,
     isPublished: true,
+    date: "24 May 2024, 12:48 pm",
   },
   {
     id: 2,
@@ -14,8 +14,8 @@ export const NEWS_DATA = [
     postedBy: "test2@gmail.com",
     isUpdatedFromMobile: true,
     category: "None",
-    categoryId: null,
     isPublished: true,
+    date: "24 May 2024, 12:48 pm",
   },
   {
     id: 3,
@@ -23,8 +23,8 @@ export const NEWS_DATA = [
     postedBy: "random1@gmail.com",
     isUpdatedFromMobile: false,
     category: "None",
-    categoryId: null,
     isPublished: true,
+    date: "24 May 2024, 12:48 pm",
   },
   {
     id: 4,
@@ -32,8 +32,8 @@ export const NEWS_DATA = [
     postedBy: "random2@gmail.com",
     isUpdatedFromMobile: true,
     category: "Events",
-    categoryId: 2,
     isPublished: true,
+    date: "24 May 2024, 12:48 pm",
   },
   {
     id: 5,
@@ -41,8 +41,8 @@ export const NEWS_DATA = [
     postedBy: "random3@gmail.com",
     isUpdatedFromMobile: false,
     category: "Events",
-    categoryId: 2,
     isPublished: false,
+    date: "24 May 2024, 12:48 pm",
   },
   {
     id: 6,
@@ -50,7 +50,7 @@ export const NEWS_DATA = [
     postedBy: "random4@gmail.com",
     isUpdatedFromMobile: false,
     category: "Events",
-    categoryId: 2,
     isPublished: true,
+    date: "24 May 2024, 12:48 pm",
   },
 ];

@@ -1,27 +1,109 @@
-import { Button, Table } from "antd";
+import { Button, Table, Space, Input } from "antd";
 import { NEWS_DATA } from "./constants";
 import {
   EditOutlined,
   MobileOutlined,
   DesktopOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
 import "./NewsList.css";
 import AddNewsModal from "../AddNewsModal/AddNewsModal";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 const NewsList = () => {
   const [openNewsModal, setOpenNewsModal] = useState(false);
+  const [newsList, setNewsList] = useState(NEWS_DATA);
+  const searchInput = useRef(null);
+
+  const handleSearch = (confirm) => {
+    confirm();
+  };
+
+  const handleReset = (clearFilters, confirm) => {
+    clearFilters();
+    confirm();
+  };
+
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      close,
+    }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() => handleSearch(confirm)}
+          style={{
+            marginBottom: 8,
+            display: "block",
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(confirm)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters, confirm)}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? "#1677ff" : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+  });
+
   const columns = [
     {
       title: "S NO",
       key: "sno",
       render: (text, object, index) => index + 1,
+      width: "10%",
     },
     {
       title: "Intro text",
       dataIndex: "introText",
       key: "introText",
       ellipsis: true,
+      ...getColumnSearchProps("introText"),
     },
     {
       title: "Posted By",
@@ -37,6 +119,12 @@ const NewsList = () => {
         <span>{text ? <MobileOutlined /> : <DesktopOutlined />}</span>
       ),
       align: "center",
+    },
+    {
+      title: "Created On",
+      dataIndex: "date",
+      key: "date",
+      ellipsis: true,
     },
     {
       title: "Category",
@@ -76,11 +164,17 @@ const NewsList = () => {
         </span>
       ),
       align: "center",
+      width: "10%",
     },
   ];
 
   const onClickAdd = () => {
     setOpenNewsModal(true);
+  };
+
+  const addNews = (data) => {
+    console.log(data);
+    setNewsList([{ ...data, id: newsList.length }, ...newsList]);
   };
 
   return (
@@ -91,12 +185,18 @@ const NewsList = () => {
       </div>
       <Table
         columns={columns}
-        dataSource={NEWS_DATA}
+        dataSource={newsList}
         bordered
         pagination={{ pageSize: 5 }}
         rowKey={(record) => record.id}
       />
-      <AddNewsModal modalOpen={openNewsModal} closeModal={setOpenNewsModal} />
+      {openNewsModal && (
+        <AddNewsModal
+          modalOpen={openNewsModal}
+          closeModal={setOpenNewsModal}
+          addNews={addNews}
+        />
+      )}
     </div>
   );
 };
