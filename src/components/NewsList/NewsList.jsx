@@ -5,6 +5,8 @@ import {
   MobileOutlined,
   DesktopOutlined,
   SearchOutlined,
+  UploadOutlined,
+  PlusSquareOutlined,
 } from "@ant-design/icons";
 import "./NewsList.css";
 import AddNewsModal from "../AddNewsModal/AddNewsModal";
@@ -13,6 +15,7 @@ import { useState, useRef } from "react";
 const NewsList = () => {
   const [openNewsModal, setOpenNewsModal] = useState(false);
   const [newsList, setNewsList] = useState(NEWS_DATA);
+  const [selectedKeys, setSelectedKeys] = useState([]);
   const searchInput = useRef(null);
 
   const handleSearch = (confirm) => {
@@ -181,13 +184,58 @@ const NewsList = () => {
     setNewsList([{ ...data, id: newsList.length }, ...newsList]);
   };
 
+  const handleSelect = (record, selected) => {
+    if (selected) {
+      setSelectedKeys((keys) => [...keys, record.id]);
+    } else {
+      setSelectedKeys((keys) => {
+        const index = keys.indexOf(record.id);
+        return [...keys.slice(0, index), ...keys.slice(index + 1)];
+      });
+    }
+  };
+
+  const publishNews = () => {
+    newsList.forEach((el) => {
+      if (selectedKeys.includes(el.id)) {
+        el.isPublished = true;
+      }
+    });
+    setNewsList([...newsList]);
+    setSelectedKeys([]);
+  };
+
+  const rowSelection = {
+    selectedKeys,
+    type: "checkbox",
+    fixed: true,
+    onSelect: handleSelect,
+    columnTitle: "Select",
+  };
+
   return (
     <div className="manage-news-page">
       <div className="page-header">
         <h3>Manage School News</h3>
-        <Button onClick={onClickAdd}> Add</Button>
+        <div className="btn-container">
+          <Button
+            icon={<PlusSquareOutlined />}
+            type="primary"
+            onClick={onClickAdd}
+          >
+            Add
+          </Button>
+          <Button
+            icon={<UploadOutlined />}
+            onClick={publishNews}
+            disabled={selectedKeys.length === 0}
+          >
+            Publish
+          </Button>
+        </div>
       </div>
       <Table
+        rowSelection={rowSelection}
         columns={columns}
         dataSource={newsList}
         bordered
